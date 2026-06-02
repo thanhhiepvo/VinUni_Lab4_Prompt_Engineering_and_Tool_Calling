@@ -35,7 +35,7 @@ URL: `http://localhost:8501` (chạy trên Streamlit local dashboard)
 | papers | tìm kiếm bài báo khoa học học thuật trên arXiv | có (nhóm thêm) |
 | paper_text | lấy và trích xuất nội dung từ bài báo arXiv cụ thể | có (nhóm thêm) |
 | resolve_twitter_handle | phân giải tên người nổi tiếng sang Twitter handle chính xác | có (nhóm thêm) |
-| send | xuất bản bản tin lên Telegram | không |
+| send | xuất bản bản tin lên Telegram (đã tích hợp & cấu hình thật) | có (nhóm cấu hình) |
 
 ## A3. Câu hỏi mẫu để thử
 
