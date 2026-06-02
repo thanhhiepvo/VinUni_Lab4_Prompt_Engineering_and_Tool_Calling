@@ -34,8 +34,8 @@ URL: `http://localhost:8501` (chạy trên Streamlit local dashboard)
 | policy | tra cứu các quy định, chính sách nội bộ của công ty | không |
 | papers | tìm kiếm bài báo khoa học học thuật trên arXiv | có (nhóm thêm) |
 | paper_text | lấy và trích xuất nội dung từ bài báo arXiv cụ thể | có (nhóm thêm) |
-| resolve_twitter_handle | phân giải tên người nổi tiếng sang Twitter handle chính xác | có (nhóm thêm) |
-| send | xuất bản bản tin lên Telegram | không |
+| resolve_twitter_handle | Khi người dùng nhắc đến tên thật (ví dụ: "tweet của Sam Altman"), tool này tra cứu và trả về username Twitter chính xác (@sama) để tool `timeline` có thể gọi API — giúp agent không bị lỗi vì thiếu handle | có (nhóm thêm) |
+| send | xuất bản bản tin lên Telegram (đã tích hợp & cấu hình thật) | có (nhóm cấu hình) |
 
 ## A3. Câu hỏi mẫu để thử
 
