@@ -9,7 +9,7 @@
 tools:
   # ---------------- Core tools ----------------
   - name: clarify
-    description: "Gửi một câu hỏi cho người dùng."
+    description: "Ask the user for missing information such as Twitter account names, URLs, time periods, or confirmation before proceeding. Use standard question templates for consistency (see system prompt for templates)."
     parameters:
       type: object
       properties:
@@ -19,21 +19,21 @@ tools:
       required: [question]
 
   - name: timeline
-    description: "Lấy các bài đăng gần đây."
+    description: "Fetch recent posts from a specific Twitter account. Requires the exact lowercase screenname (handle) without the '@' symbol (e.g. 'elonmusk' or 'sama'). Convert well-known person names to handles (e.g., 'Sam Altman' -> 'sama', 'Elon Musk' -> 'elonmusk', 'Andrej Karpathy' -> 'karpathy'). Do NOT use for keyword/topic search; use social_search instead."
     parameters:
       type: object
       properties:
-        screenname: {type: string, default: "", description: "Tên tài khoản"}
+        screenname: {type: string, default: "", description: "Tên tài khoản Twitter (screenname/handle) viết liền, không chứa ký tự '@'"}
         limit: {type: integer, default: 5, description: "Số lượng"}
       required: [screenname]
 
   - name: social_search
-    description: "Tìm trên mạng xã hội."
+    description: "Search social media posts by keyword or topic. Use this for tweets about a subject, not for a specific account."
     parameters:
       type: object
       properties:
-        query: {type: string, default: "", description: "Từ khóa"}
-        search_type: {type: string, enum: [Latest, Top], default: "Latest", description: "Cách sắp xếp"}
+        query: {type: string, default: "", description: "Từ khóa hoặc chủ đề"}
+        search_type: {type: string, enum: [Latest, Top], default: "Latest", description: "Sắp xếp theo mới nhất hoặc phổ biến"}
         limit: {type: integer, default: 5, description: "Số lượng"}
       required: [query]
 
@@ -49,11 +49,11 @@ tools:
       required: [query]
 
   - name: fetch
-    description: "Lấy nội dung từ một địa chỉ."
+    description: "Read content from a specific URL. Only use when the user provides an explicit URL; ask for the URL first if the user says 'this article' or 'bài viết này'."
     parameters:
       type: object
       properties:
-        url: {type: string, default: "", description: "Địa chỉ"}
+        url: {type: string, default: "", description: "URL cụ thể"}
       required: [url]
 
   - name: format
@@ -79,7 +79,7 @@ tools:
 
   # ---------------- Bonus tools ----------------
   - name: send
-    description: "Gửi một đoạn văn bản đi."
+    description: "Publish a Telegram message only when the user explicitly asks to send or post. Use confirmed=true only after the user has explicitly requested publishing; otherwise clarify first."
     parameters:
       type: object
       properties:
@@ -116,3 +116,38 @@ tools:
         max_pages: {type: integer, default: 5, description: "Số trang"}
         max_chars: {type: integer, default: 8000, description: "Số ký tự"}
       required: [arxiv_url]
+
+  - name: audit_eval
+    description: "Analyze a run JSON file and summarize failures by type, routing mismatches, and argument errors. Use this to diagnose eval failures and guide prompt/tool tuning."
+    parameters:
+      type: object
+      properties:
+        run_json_path: {type: string, default: "", description: "Path to a run/*.json file (e.g., runs/v0_B_base_openai_20260602T142654960548.json)"}
+        failure_types: {type: array, default: [], items: {type: string}, description: "Optional filter by failure types (e.g., [\"missing_info\", \"wrong_tool\"])"}
+      required: [run_json_path]
+
+  - name: compare_runs
+    description: "Compare two eval run JSON files to show improvements, which cases were fixed, and how failure types shifted. Use this to quantify prompt/tool changes."
+    parameters:
+      type: object
+      properties:
+        run1_path: {type: string, default: "", description: "Path to first run/*.json file (baseline)"}
+        run2_path: {type: string, default: "", description: "Path to second run/*.json file (to compare)"}
+      required: [run1_path, run2_path]
+
+  - name: batch_eval
+    description: "Run eval.py with multiple configurations and generate a comparison matrix. Use this to test multiple prompt versions or model providers simultaneously."
+    parameters:
+      type: object
+      properties:
+        configs: {type: array, default: [], items: {type: object}, description: "List of config objects, each with: name, system_prompt_path, tools_yaml_path, provider, eval_data"}
+      required: [configs]
+
+  - name: resolve_twitter_handle
+    description: "Convert person names to Twitter handles. Maps 'Sam Altman' → @samaltman, 'Elon Musk' → @elonmusk, etc. Use this before calling timeline to ensure correct handle lookups."
+    parameters:
+      type: object
+      properties:
+        person_reference: {type: string, default: "", description: "Person name, nickname, or handle to resolve (e.g., 'Sam Altman', 'Elon', '@samaltman')"}
+        context: {type: string, default: "", description: "Optional context to disambiguate (e.g., 'in crypto context' or 'in AI context')"}
+      required: [person_reference]
