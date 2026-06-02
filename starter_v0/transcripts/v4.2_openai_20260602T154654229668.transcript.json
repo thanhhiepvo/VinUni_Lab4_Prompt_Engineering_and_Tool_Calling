@@ -1,0 +1,16 @@
+{
+  "transcript_id": "v4.2_openai_20260602T154654229668",
+  "version": "v4.2",
+  "artifact_version": "v4.2+pbf07158b235c+t98bb7df9996d",
+  "prompt_hash": "bf07158b235cb8f01771c8d6eba29d735be61611c26ae81d0ccd24bb5895ac19",
+  "tools_hash": "98bb7df9996d929b9bf17aa7cdb31af1b6abce7943df29dfe3273dadbaea0182",
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "system_prompt": "/Users/thanhhiepvos/Code/VinUni/VinUni_Lab4_Prompt_Engineering_and_Tool_Calling/starter_v0/artifacts/system_prompt.md",
+  "tools": "/Users/thanhhiepvos/Code/VinUni/VinUni_Lab4_Prompt_Engineering_and_Tool_Calling/starter_v0/artifacts/tools.yaml",
+  "history_window": 5,
+  "max_tool_rounds": 4,
+  "created_at": "2026-06-02T15:46:54",
+  "updated_at": "2026-06-02T15:47:00",
+  "turns": []
+}
