@@ -20,6 +20,7 @@ from .lookup.tool import web_search
 from .audit_eval.tool import audit_eval
 from .compare_runs.tool import compare_runs
 from .batch_eval.tool import batch_eval
+from .resolve_twitter_handle.tool import resolve_twitter_handle
 
 
 # NOTE (starter_v0): tool names here are intentionally vague. These keys are the
@@ -41,6 +42,7 @@ TOOL_FUNCTIONS = {
     "audit_eval": audit_eval,
     "compare_runs": compare_runs,
     "batch_eval": batch_eval,
+    "resolve_twitter_handle": resolve_twitter_handle,
 }
 
 

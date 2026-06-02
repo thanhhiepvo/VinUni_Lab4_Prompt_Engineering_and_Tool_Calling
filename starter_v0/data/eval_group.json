@@ -2,6 +2,117 @@
   "dataset_id": "day04_v2_research_group",
   "dataset_role": "group",
   "description": "Case do NHÓM tự viết thêm để cover thêm trường hợp. Mỗi case cần: id, phase='B', query HOẶC turns, failure_type (thuộc allowed_failure_types), và expect (tool_calls[...] hoặc no_tool=true). Nên kèm metadata.what_it_tests.",
-  "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "cases": [
+    {
+      "id": "G01_single_timeline_karpathy",
+      "phase": "B",
+      "suite": "group",
+      "query": "Hãy lấy các tweet mới nhất của Karpathy",
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "timeline", "args": {"screenname": "karpathy"}}]},
+      "metadata": {"skill": "routing_name_to_handle", "difficulty": "easy", "what_it_tests": "Convert name Karpathy to screenname karpathy and call timeline"}
+    },
+    {
+      "id": "G02_single_policy_data_privacy",
+      "phase": "B",
+      "suite": "group",
+      "query": "Theo nội quy công ty, có được đưa credentials vào prompt của LLM không?",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "policy", "args": {"policy_area": "data_privacy"}}]},
+      "metadata": {"skill": "routing_policy_area", "difficulty": "medium", "what_it_tests": "Route question about credentials / data privacy to policy tool with data_privacy area"}
+    },
+    {
+      "id": "G03_single_papers_agent",
+      "phase": "B",
+      "suite": "group",
+      "query": "Tìm các bài báo khoa học gần đây về AI agents",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "papers", "args": {"query": "AI agents"}}]},
+      "metadata": {"skill": "routing_papers", "difficulty": "easy", "what_it_tests": "Route academic research question to papers tool"}
+    },
+    {
+      "id": "G04_single_clarify_no_url",
+      "phase": "B",
+      "suite": "group",
+      "query": "Hãy đọc nội dung và tóm tắt giùm mình bài viết này",
+      "failure_type": "missing_info",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "text"}}]},
+      "metadata": {"skill": "clarify_missing_url", "difficulty": "easy", "what_it_tests": "Ask for URL when 'bài viết này' is specified without link"}
+    },
+    {
+      "id": "G05_single_parallel_fetch_policy",
+      "phase": "B",
+      "suite": "group",
+      "query": "Hãy đọc link này https://openai.com/research/ và đối chiếu với guidelines về research workflow của công ty",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [
+        {"name": "fetch", "args": {"url": "https://openai.com/research/"}},
+        {"name": "policy", "args": {"policy_area": "ai_research"}}
+      ]},
+      "metadata": {"skill": "parallel_tool_calls", "difficulty": "hard", "what_it_tests": "Execute fetch and policy in parallel"}
+    },
+    {
+      "id": "G06_multi_carryover_karpathy",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Cho mình xem 5 tweet mới nhất của Andrej Karpathy"},
+        {"role": "user", "content": "À đổi ý rồi, lấy 10 tweet nhé"},
+        {"role": "user", "content": "Vẫn của Karpathy"}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "timeline", "args": {"screenname": "karpathy", "limit": 10}}]},
+      "metadata": {"skill": "multiturn_carryover", "difficulty": "hard", "what_it_tests": "Carry over handle karpathy and update limit to 10 across turns"}
+    },
+    {
+      "id": "G07_multi_switch_web_to_arxiv",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Tin tức AI hôm nay có gì?"},
+        {"role": "user", "content": "Thay vì tin tức web, hãy tìm các paper nghiên cứu mới về LLM trên arXiv"},
+        {"role": "user", "content": "Chỉ tìm paper thôi"}
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "papers", "args": {"query": "LLM"}}]},
+      "metadata": {"skill": "multiturn_switch_tool", "difficulty": "hard", "what_it_tests": "Switch from web news to arxiv papers and extract correct search query"}
+    },
+    {
+      "id": "G08_multi_clarify_telegram_confirm",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Tạo bản tin AI và đăng lên Telegram cho mình"},
+        {"role": "user", "content": "Xác nhận gửi đi nhé"}
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {"tool_calls": [{"name": "send", "args": {"confirmed": true}}]},
+      "metadata": {"skill": "multiturn_telegram_confirm", "difficulty": "hard", "what_it_tests": "Confirm send in multi-turn conversation"}
+    },
+    {
+      "id": "G09_multi_carryover_policy",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Tra cứu chính sách của công ty về data privacy"},
+        {"role": "user", "content": "Cho mình biết về quy định chia sẻ dữ liệu người dùng"}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "policy", "args": {"policy_area": "data_privacy", "query": "quy định chia sẻ dữ liệu người dùng"}}]},
+      "metadata": {"skill": "multiturn_policy_carryover", "difficulty": "hard", "what_it_tests": "Carry over policy area data_privacy and set new query"}
+    },
+    {
+      "id": "G10_multi_carryover_fetch_url",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Hãy đọc bài viết này giúp mình"},
+        {"role": "user", "content": "https://openai.com/blog/gpt-4o"},
+        {"role": "user", "content": "Tóm tắt các ý chính nhé"}
+      ],
+      "failure_type": "missing_info",
+      "expect": {"tool_calls": [{"name": "fetch", "args": {"url": "https://openai.com/blog/gpt-4o"}}]},
+      "metadata": {"skill": "multiturn_url_clarify", "difficulty": "medium", "what_it_tests": "Carry over clarified URL and invoke fetch"}
+    }
+  ]
 }

@@ -9,7 +9,7 @@
 tools:
   # ---------------- Core tools ----------------
   - name: clarify
-    description: "Gửi một câu hỏi cho người dùng để lấy thông tin còn thiếu như tên tài khoản tweet, URL, hoặc xác nhận trước khi dùng công cụ."
+    description: "Ask the user for missing information such as Twitter account names, URLs, time periods, or confirmation before proceeding. Use standard question templates for consistency (see system prompt for templates)."
     parameters:
       type: object
       properties:
@@ -19,11 +19,11 @@ tools:
       required: [question]
 
   - name: timeline
-    description: "Fetch recent posts from a specific Twitter account. Requires a screenname; do not use for keyword search."
+    description: "Fetch recent posts from a specific Twitter account. Requires the exact lowercase screenname (handle) without the '@' symbol (e.g. 'elonmusk' or 'sama'). Convert well-known person names to handles (e.g., 'Sam Altman' -> 'sama', 'Elon Musk' -> 'elonmusk', 'Andrej Karpathy' -> 'karpathy'). Do NOT use for keyword/topic search; use social_search instead."
     parameters:
       type: object
       properties:
-        screenname: {type: string, default: "", description: "Tên tài khoản Twitter"}
+        screenname: {type: string, default: "", description: "Tên tài khoản Twitter (screenname/handle) viết liền, không chứa ký tự '@'"}
         limit: {type: integer, default: 5, description: "Số lượng"}
       required: [screenname]
 
@@ -142,3 +142,12 @@ tools:
       properties:
         configs: {type: array, default: [], items: {type: object}, description: "List of config objects, each with: name, system_prompt_path, tools_yaml_path, provider, eval_data"}
       required: [configs]
+
+  - name: resolve_twitter_handle
+    description: "Convert person names to Twitter handles. Maps 'Sam Altman' → @samaltman, 'Elon Musk' → @elonmusk, etc. Use this before calling timeline to ensure correct handle lookups."
+    parameters:
+      type: object
+      properties:
+        person_reference: {type: string, default: "", description: "Person name, nickname, or handle to resolve (e.g., 'Sam Altman', 'Elon', '@samaltman')"}
+        context: {type: string, default: "", description: "Optional context to disambiguate (e.g., 'in crypto context' or 'in AI context')"}
+      required: [person_reference]
