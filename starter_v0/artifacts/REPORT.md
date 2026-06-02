@@ -3,7 +3,7 @@
 ## Team
 
 - Team: 5
-- Members: Võ Thanh Hiệp, Nguyễn Công Tuấn Anh
+- Members: Võ Thanh Hiệp - 2A202600836, Nguyễn Công Tuấn Anh - 2A202600836
 - Provider/model: OpenAI / gpt-4o-mini
 
 ## Final Metrics
