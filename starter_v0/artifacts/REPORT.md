@@ -58,6 +58,8 @@ URL: `http://localhost:8501` (chạy trên Streamlit local dashboard)
 | v3 | `tools.yaml` | Add resolve_twitter_handle tool and mapping dictionary | 0.80 (base) | 0.60 (base) | `v3_B_base_openai_20260602T152244417195.json` |
 | v4.1 | `system_prompt.md` | Enforce name-to-handle conversion & multi-turn drop constraints | 0.60 (base) | 1.00 (base) | `v4.1_B_base_openai_20260602T152834874233.json` |
 | v4.2 | `system_prompt.md` | Handle confirmation response types explicitly in multi-turn | 0.90 (group) | 1.00 (group) | `v4.2_B_group_openai_20260602T153238616169.json` |
+| v5 | `n/a` | Verify 100% stability across base, group, and extension suites | 1.00 (base) | 1.00 (base) | `v5_B_base_openai_20260602T164249216830.json` |
+
 
 ## B2. Failure Analysis
 
